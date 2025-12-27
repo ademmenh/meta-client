@@ -30,13 +30,9 @@ export class MetaClient {
     private readonly retryDelayMs = 1000;
 
     constructor(private readonly configService: ConfigService) {
-        const graphVersion = this.configService.get<string>('meta.graphVersion');
+        const graphVersion = this.configService.getOrThrow<string>('META_GRAPH_VERSION');
         this.baseUrl = `https://graph.facebook.com/v${graphVersion}`;
-        this.accessToken = this.configService.get<string>('meta.systemUserToken') || '';
-
-        if (!this.accessToken) {
-            this.logger.warn('META_SYSTEM_USER_TOKEN is not configured. API calls will fail.');
-        }
+        this.accessToken = this.configService.getOrThrow<string>('META_SYSTEM_USER_TOKEN')
     }
 
     async request<T>(
