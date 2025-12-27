@@ -10,6 +10,7 @@ import { AdsModule } from './ads/ads.module';
 import { MessengerModule } from './messenger/messenger.module';
 import { WhatsappModule } from './whatsapp/whatsapp.module';
 import { WebhooksModule } from './webhooks/webhooks.module';
+import { InsightsModule } from './insights/insights.module';
 
 @Module({
     imports: [
@@ -22,6 +23,7 @@ import { WebhooksModule } from './webhooks/webhooks.module';
         MessengerModule,
         WhatsappModule,
         WebhooksModule,
+        InsightsModule,
     ],
     controllers: [AppController],
     providers: [AppService],
