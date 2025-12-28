@@ -4,7 +4,6 @@ import {
     ArgumentsHost,
     HttpException,
     HttpStatus,
-    Logger,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { ErrorResponseDto } from '../dto/error-response.dto';
@@ -12,7 +11,6 @@ import { ErrorCode } from '../enums/error-codes.enum';
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
-    private readonly logger = new Logger(HttpExceptionFilter.name);
 
     catch(exception: unknown, host: ArgumentsHost): void {
         const ctx = host.switchToHttp();
@@ -47,19 +45,9 @@ export class HttpExceptionFilter implements ExceptionFilter {
             status = HttpStatus.INTERNAL_SERVER_ERROR;
             errorCode = ErrorCode.INTERNAL_ERROR;
             message = 'An unexpected error occurred';
-
-            this.logger.error(
-                `Unhandled exception: ${exception}`,
-                exception instanceof Error ? exception.stack : undefined,
-            );
         }
 
         const errorResponse = new ErrorResponseDto(errorCode, message, details);
-
-        this.logger.warn(
-            `${request.method} ${request.url} - ${status} - ${errorCode}: ${message}`,
-        );
-
         response.status(status).json(errorResponse);
     }
 

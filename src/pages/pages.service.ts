@@ -11,12 +11,12 @@ export class PagesService {
 
     async listPages(): Promise<PageListResponseDto> {
         return this.metaClient.get<PageListResponseDto>('/me/accounts', {
-            fields: 'id,name,category,category_list,access_token,tasks',
+            fields: 'id,name,category,category_list,tasks',
         });
     }
 
     async getPage(pageId: string, fields?: string): Promise<PageDto> {
-        const defaultFields = 'id,name,category,category_list,access_token,tasks';
+        const defaultFields = 'id,name,category,category_list,tasks';
         return this.metaClient.get<PageDto>(`/${pageId}`, {
             fields: fields || defaultFields,
         });

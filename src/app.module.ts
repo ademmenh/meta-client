@@ -9,7 +9,6 @@ import { InstagramModule } from './instagram/instagram.module';
 import { AdsModule } from './ads/ads.module';
 import { MessengerModule } from './messenger/messenger.module';
 import { WhatsappModule } from './whatsapp/whatsapp.module';
-import { WebhooksModule } from './webhooks/webhooks.module';
 import { InsightsModule } from './insights/insights.module';
 
 @Module({
@@ -22,7 +21,6 @@ import { InsightsModule } from './insights/insights.module';
         AdsModule,
         MessengerModule,
         WhatsappModule,
-        WebhooksModule,
         InsightsModule,
     ],
     controllers: [AppController],

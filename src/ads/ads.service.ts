@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { MetaClient } from '../meta/meta.client';
 import { CacheService } from '../common/services/cache.service';
 import {
@@ -17,7 +17,6 @@ import {
 
 @Injectable()
 export class AdsService {
-    private readonly logger = new Logger(AdsService.name);
     private readonly CACHE_TTL_SECONDS = 300;
 
     constructor(
@@ -29,7 +28,6 @@ export class AdsService {
         const cacheKey = 'ads:accounts';
         const cached = this.cacheService.get<AdAccountListDto>(cacheKey);
         if (cached) {
-            this.logger.debug('Cache hit for ad accounts');
             return cached;
         }
 

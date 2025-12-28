@@ -3,7 +3,6 @@ import {
     Catch,
     ArgumentsHost,
     HttpStatus,
-    Logger,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { ErrorResponseDto } from '../dto/error-response.dto';
@@ -29,8 +28,6 @@ export class MetaApiException extends Error {
 
 @Catch(MetaApiException)
 export class MetaExceptionFilter implements ExceptionFilter {
-    private readonly logger = new Logger(MetaExceptionFilter.name);
-
     catch(exception: MetaApiException, host: ArgumentsHost): void {
         const ctx = host.switchToHttp();
         const response = ctx.getResponse<Response>();
@@ -46,10 +43,6 @@ export class MetaExceptionFilter implements ExceptionFilter {
                 metaErrorSubcode: exception.metaError.error_subcode,
                 metaTraceId: exception.metaError.fbtrace_id,
             },
-        );
-
-        this.logger.warn(
-            `Meta API Error: ${errorCode} - ${exception.metaError.message} (code: ${exception.metaError.code})`,
         );
 
         response.status(status).json(errorResponse);

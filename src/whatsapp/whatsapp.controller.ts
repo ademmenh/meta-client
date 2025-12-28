@@ -1,4 +1,6 @@
 import { Controller, Post, Param, Body } from '@nestjs/common';
+import { ApiDto } from '../common/api/decorators/api.dto.decorator';
+import { RBody } from '../common/api/decorators/response-transform.decorator';
 import { WhatsappService } from './whatsapp.service';
 import {
     SendTextMessageDto,
@@ -12,6 +14,8 @@ export class WhatsappController {
     constructor(private readonly whatsappService: WhatsappService) { }
 
     @Post(':phoneNumberId/messages/text')
+    @ApiDto({ type: WhatsAppMessageResponseDto })
+    @RBody({ dto: WhatsAppMessageResponseDto })
     async sendText(
         @Param('phoneNumberId') phoneNumberId: string,
         @Body() dto: SendTextMessageDto,
@@ -20,6 +24,8 @@ export class WhatsappController {
     }
 
     @Post(':phoneNumberId/messages/template')
+    @ApiDto({ type: WhatsAppMessageResponseDto })
+    @RBody({ dto: WhatsAppMessageResponseDto })
     async sendTemplate(
         @Param('phoneNumberId') phoneNumberId: string,
         @Body() dto: SendTemplateMessageDto,
@@ -28,6 +34,8 @@ export class WhatsappController {
     }
 
     @Post(':phoneNumberId/messages/media')
+    @ApiDto({ type: WhatsAppMessageResponseDto })
+    @RBody({ dto: WhatsAppMessageResponseDto })
     async sendMedia(
         @Param('phoneNumberId') phoneNumberId: string,
         @Body() dto: SendMediaMessageDto,

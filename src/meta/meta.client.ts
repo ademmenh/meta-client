@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { MetaApiException, MetaApiError } from '../common/filters/meta-exception.filter';
 
@@ -23,7 +23,6 @@ export interface MetaResponse<T> {
 
 @Injectable()
 export class MetaClient {
-    private readonly logger = new Logger(MetaClient.name);
     private readonly baseUrl: string;
     private readonly accessToken: string;
     private readonly defaultRetries = 3;
@@ -71,9 +70,6 @@ export class MetaClient {
         } catch (error) {
             if (error instanceof MetaApiException) {
                 if (this.isRateLimitError(error) && retriesLeft > 0) {
-                    this.logger.warn(
-                        `Rate limited. Retrying in ${this.retryDelayMs}ms. Retries left: ${retriesLeft}`,
-                    );
                     await this.delay(this.retryDelayMs);
                     return this.executeWithRetry<T>(url, method, body, retriesLeft - 1);
                 }
@@ -81,9 +77,6 @@ export class MetaClient {
             }
 
             if (retriesLeft > 0) {
-                this.logger.warn(
-                    `Request failed. Retrying in ${this.retryDelayMs}ms. Retries left: ${retriesLeft}`,
-                );
                 await this.delay(this.retryDelayMs);
                 return this.executeWithRetry<T>(url, method, body, retriesLeft - 1);
             }
@@ -144,16 +137,11 @@ export class MetaClient {
             );
         }
 
-        this.logger.error(
-            `Meta API Error: ${metaError.message} (code: ${metaError.code}, subcode: ${metaError.error_subcode})`,
-        );
-
         throw new MetaApiException(metaError, httpStatus);
     }
 
     private isRateLimitError(error: MetaApiException): boolean {
-        const rateLimitCodes = [4, 17, 341];
-        return rateLimitCodes.includes(error.metaError.code);
+        const rateLimitCodes = [4, 17, 341]; return rateLimitCodes.includes(error.metaError.code);
     }
 
     private delay(ms: number): Promise<void> {
