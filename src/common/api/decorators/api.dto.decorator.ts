@@ -1,10 +1,6 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiResponse, ApiResponseCommonMetadata } from '@nestjs/swagger';
-import { BadRequestDto } from '../dto/bad-request.dto';
-import { UnauthorizedDto } from '../dto/unauthorized.dto';
-import { NotFoundDto } from '../dto/not-found.dto';
-import { InternalServerErrorDto } from '../dto/internal-server-error.dto';
-import { ForbiddenDto } from '../dto/forbidden.dto';
+import { ErrorDto } from '../dto/error.dto';
 import { SuccessDtoF } from '../dto/dto';
 
 export const ApiDto = (params: ApiResponseCommonMetadata): MethodDecorator => {
@@ -17,27 +13,7 @@ export const ApiDto = (params: ApiResponseCommonMetadata): MethodDecorator => {
         ApiResponse({
             status: 400,
             description: 'Bad Request',
-            type: BadRequestDto,
+            type: ErrorDto,
         }),
-        ApiResponse({
-            status: 401,
-            description: 'Unauthorized',
-            type: UnauthorizedDto,
-        }),
-        ApiResponse({
-            status: 403,
-            description: 'Forbidden',
-            type: ForbiddenDto,
-        }),
-        ApiResponse({
-            status: 404,
-            description: 'Resource not found',
-            type: NotFoundDto,
-        }),
-        ApiResponse({
-            status: 500,
-            description: 'Internal Server Error',
-            type: InternalServerErrorDto,
-        })
     );
 };

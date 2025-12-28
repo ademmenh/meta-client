@@ -1,10 +1,6 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiOkResponse, ApiResponse, ApiQuery, getSchemaPath, ApiExtraModels } from '@nestjs/swagger';
-import { BadRequestDto } from '../dto/bad-request.dto';
-import { UnauthorizedDto } from '../dto/unauthorized.dto';
-import { NotFoundDto } from '../dto/not-found.dto';
-import { InternalServerErrorDto } from '../dto/internal-server-error.dto';
-import { ForbiddenDto } from '../dto/forbidden.dto';
+import { ErrorDto } from '../dto/error.dto';
 
 export interface IPaginatedDto {
     type: any;
@@ -15,6 +11,7 @@ export interface IPaginatedDto {
 export const ApiPaginatedDto = (param: IPaginatedDto): MethodDecorator => {
     return applyDecorators(
         ApiExtraModels(param.type),
+        ApiExtraModels(ErrorDto),
         ApiQuery({ name: 'after', type: String, required: false, description: 'The cursor for the next page' }),
         ApiQuery({ name: 'before', type: String, required: false, description: 'The cursor for the previous page' }),
         ApiQuery({ name: 'limit', type: Number, required: false, example: 10 }),
@@ -45,27 +42,7 @@ export const ApiPaginatedDto = (param: IPaginatedDto): MethodDecorator => {
         ApiResponse({
             status: 400,
             description: 'Bad Request',
-            type: BadRequestDto,
+            type: ErrorDto,
         }),
-        ApiResponse({
-            status: 401,
-            description: 'Unauthorized',
-            type: UnauthorizedDto,
-        }),
-        ApiResponse({
-            status: 403,
-            description: 'Forbidden',
-            type: ForbiddenDto,
-        }),
-        ApiResponse({
-            status: 404,
-            description: 'Resource not found',
-            type: NotFoundDto,
-        }),
-        ApiResponse({
-            status: 500,
-            description: 'Internal Server Error',
-            type: InternalServerErrorDto,
-        })
     );
 };
